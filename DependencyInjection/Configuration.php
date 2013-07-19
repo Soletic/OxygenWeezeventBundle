@@ -2,6 +2,8 @@
 
 namespace Oxygen\WeezeventBundle\DependencyInjection;
 
+use Oxygen\FrameworkBundle\DependencyInjection\OxygenConfiguration;
+
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -10,7 +12,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  */
-class Configuration implements ConfigurationInterface
+class Configuration extends OxygenConfiguration implements ConfigurationInterface
 {
     /**
      * {@inheritDoc}
@@ -24,7 +26,18 @@ class Configuration implements ConfigurationInterface
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
         $rootNode->children()->scalarNode('apikey')->cannotBeEmpty()->end()->end();
+        $rootNode
+        	->children()
+        		->arrayNode('default')
+        		->cannotBeEmpty()
+        			->children()
+        				->scalarNode('username')->defaultNull()->end()
+        				->scalarNode('password')->defaultNull()->end()
+       				->end()
+        		->end()
+       		->end();
 
+        		
         return $treeBuilder;
     }
 }

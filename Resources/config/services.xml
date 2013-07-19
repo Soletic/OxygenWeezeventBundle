@@ -4,17 +4,24 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="oxygen_weezevent.example.class">Oxygen\WeezeventBundle\Example</parameter>
+        <parameter key="oxygen_weezevent.api.class">Oxygen\WeezeventBundle\API\WeezeventAPI</parameter>
+        <parameter key="oxygen_weezevent.forms.ticket_choice.type_class">Oxygen\WeezeventBundle\Form\Type\TicketChoiceFormType</parameter>
     </parameters>
 
     <services>
-        <service id="oxygen_weezevent.example" class="%oxygen_weezevent.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="oxygen_weezevent.api" class="%oxygen_weezevent.api.class%">
+            <argument type="service" id="session" />
+            <argument>%oxygen_weezevent.apikey%</argument>
+            <argument>%oxygen_weezevent.default.username%</argument>
+            <argument>%oxygen_weezevent.default.password%</argument>
         </service>
+        
+        <service id="oxygen_weezevent.forms.ticket_choice" class="%oxygen_weezevent.forms.ticket_choice.type_class%">
+        	<tag name="form.type" alias="oxygen_weezevent_tickets_type" />
+        	<argument type="service" id="oxygen_weezevent.api" />
+        </service>
+        
     </services>
-    -->
+
 </container>
