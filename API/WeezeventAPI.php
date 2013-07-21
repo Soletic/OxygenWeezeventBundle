@@ -138,4 +138,27 @@ class WeezeventAPI {
 		return $tickets;
 	}
 	
+	public function isIdWeezTicketValid($ticketWeezId, $ticketId) {
+		$this->throwExceptionIfNotConnected();
+		$r = $this->getResponse('/participants', array('access_token' => $this->getToken(), 'api_key' => $this->apiKey, 'id_ticket[]' => $ticketId));
+		$tickets = array();
+		foreach($r['participants'] as $participant) {
+			if ($participant['id_weez_ticket'] == $ticketWeezId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public function getEmail($ticketWeezId, $ticketId) {
+		$this->throwExceptionIfNotConnected();
+		$r = $this->getResponse('/participants', array('access_token' => $this->getToken(), 'api_key' => $this->apiKey, 'id_ticket[]' => $ticketId));
+		$tickets = array();
+		foreach($r['participants'] as $participant) {
+			if ($participant['id_weez_ticket'] == $ticketWeezId) {
+				return (!empty($participant['owner']['email']))?$participant['owner']['email']:null;
+			}
+		}
+		return null;
+	}
 }
