@@ -150,13 +150,30 @@ class WeezeventAPI {
 		return false;
 	}
 	
+	public function getParticipants($ticketId) {
+		$this->throwExceptionIfNotConnected();
+		$r = $this->getResponse('/participants', array('access_token' => $this->getToken(), 'api_key' => $this->apiKey, 'id_ticket[]' => $ticketId));
+		if (!empty($r['participants'])) {
+			return $r['participants'];
+		}
+		return null;
+	}
+	
+	/**
+	 * Return email of a participant from ticket id
+	 * 
+	 * @param string $ticketWeezId
+	 * @param string $ticketId
+	 */
 	public function getEmail($ticketWeezId, $ticketId) {
 		$this->throwExceptionIfNotConnected();
 		$r = $this->getResponse('/participants', array('access_token' => $this->getToken(), 'api_key' => $this->apiKey, 'id_ticket[]' => $ticketId));
 		$tickets = array();
-		foreach($r['participants'] as $participant) {
-			if ($participant['id_weez_ticket'] == $ticketWeezId) {
-				return (!empty($participant['owner']['email']))?$participant['owner']['email']:null;
+		if (!empty($r['participants'])) {
+			foreach($r['participants'] as $participant) {
+				if ($participant['id_weez_ticket'] == $ticketWeezId) {
+					return (!empty($participant['owner']['email']))?$participant['owner']['email']:null;
+				}
 			}
 		}
 		return null;
